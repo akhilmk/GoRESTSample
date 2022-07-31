@@ -4,7 +4,6 @@ GET
     
 POST
     http://localhost:8000/api/books 
-   
     Headers
     Content-Type : application/json
    
@@ -16,5 +15,6 @@ POST
     }
 Delete
     http://localhost:8000/api/books/1
+    
 PUT
     http://localhost:8000/api/books/{id}
