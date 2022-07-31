@@ -4,9 +4,9 @@ GET
     
 POST
     http://localhost:8000/api/books 
+    
     Headers
     Content-Type : application/json
-   
     Body : raw
     {
     "isbn":"1234",
