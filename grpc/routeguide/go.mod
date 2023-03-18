@@ -1,4 +1,4 @@
-module github.com/akhilmk/grpc/routeguide
+module github.com/akhilmk/gosamples/grpc/routeguide
 
 go 1.17
 
