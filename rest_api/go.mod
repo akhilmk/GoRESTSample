@@ -1,4 +1,4 @@
-module BooksRestAPI
+module github.com/akhilmk/gosamples/rest_api
 
 go 1.17
 

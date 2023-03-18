@@ -13,8 +13,8 @@ var ready bool
 
 func main() {
 	fmt.Println("main start")
-	//	doSomeWorkWithCondSignal()
-	doSomeWorkWithCondBroadcast()
+	doSomeWorkWithCondSignal()
+	//doSomeWorkWithCondBroadcast()
 	fmt.Println("main end")
 
 }
@@ -77,7 +77,7 @@ func getHttpStatus(url string) {
 
 }
 
-func doSomeWorkWithCond() {
+func doSomeWorkWithCondSignal() {
 	cond := sync.NewCond(&sync.Mutex{})
 	go someWorkWithCond(cond)
 	workIteration := 0
