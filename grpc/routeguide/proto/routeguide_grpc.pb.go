@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.10
-// source: routeguide_proto/routeguide.proto
+// source: proto/routeguide.proto
 
-package routeguideproto
+package proto
 
 import (
 	context "context"
@@ -38,7 +38,7 @@ func NewRouteGuideClient(cc grpc.ClientConnInterface) RouteGuideClient {
 
 func (c *routeGuideClient) GetFeature(ctx context.Context, in *Point, opts ...grpc.CallOption) (*Feature, error) {
 	out := new(Feature)
-	err := c.cc.Invoke(ctx, "/routeguideproto.RouteGuide/GetFeature", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.RouteGuide/GetFeature", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *routeGuideClient) GetFeature(ctx context.Context, in *Point, opts ...gr
 }
 
 func (c *routeGuideClient) ListFeatures(ctx context.Context, in *Rectangle, opts ...grpc.CallOption) (RouteGuide_ListFeaturesClient, error) {
-	stream, err := c.cc.NewStream(ctx, &RouteGuide_ServiceDesc.Streams[0], "/routeguideproto.RouteGuide/ListFeatures", opts...)
+	stream, err := c.cc.NewStream(ctx, &RouteGuide_ServiceDesc.Streams[0], "/proto.RouteGuide/ListFeatures", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (x *routeGuideListFeaturesClient) Recv() (*Feature, error) {
 }
 
 func (c *routeGuideClient) RecordRoute(ctx context.Context, opts ...grpc.CallOption) (RouteGuide_RecordRouteClient, error) {
-	stream, err := c.cc.NewStream(ctx, &RouteGuide_ServiceDesc.Streams[1], "/routeguideproto.RouteGuide/RecordRoute", opts...)
+	stream, err := c.cc.NewStream(ctx, &RouteGuide_ServiceDesc.Streams[1], "/proto.RouteGuide/RecordRoute", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (x *routeGuideRecordRouteClient) CloseAndRecv() (*RouteSummary, error) {
 }
 
 func (c *routeGuideClient) RouteChat(ctx context.Context, opts ...grpc.CallOption) (RouteGuide_RouteChatClient, error) {
-	stream, err := c.cc.NewStream(ctx, &RouteGuide_ServiceDesc.Streams[2], "/routeguideproto.RouteGuide/RouteChat", opts...)
+	stream, err := c.cc.NewStream(ctx, &RouteGuide_ServiceDesc.Streams[2], "/proto.RouteGuide/RouteChat", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func _RouteGuide_GetFeature_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/routeguideproto.RouteGuide/GetFeature",
+		FullMethod: "/proto.RouteGuide/GetFeature",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RouteGuideServer).GetFeature(ctx, req.(*Point))
@@ -277,7 +277,7 @@ func (x *routeGuideRouteChatServer) Recv() (*RouteNote, error) {
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RouteGuide_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "routeguideproto.RouteGuide",
+	ServiceName: "proto.RouteGuide",
 	HandlerType: (*RouteGuideServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -303,5 +303,5 @@ var RouteGuide_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "routeguide_proto/routeguide.proto",
+	Metadata: "proto/routeguide.proto",
 }

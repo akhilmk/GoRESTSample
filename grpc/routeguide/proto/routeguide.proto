@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/akhilmk/grpc/routeguideproto";
+option go_package = "github.com/akhilmk/gosamples/grpc/proto";
 
-package routeguideproto;
+package proto;
 
 service RouteGuide {
     rpc GetFeature(Point) returns (Feature) {}
