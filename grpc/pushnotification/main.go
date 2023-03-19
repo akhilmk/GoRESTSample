@@ -17,6 +17,7 @@ var (
 	notifChan = make(chan string)
 	noCount   = 0
 )
+var clients []pb.NotifSubscriber_SubscribeMessageServer
 
 func main() {
 	go startNotifApi()
@@ -44,12 +45,15 @@ type server struct {
 
 func (s *server) SubscribeMessage(in *pb.SubscribeMsg, stream pb.NotifSubscriber_SubscribeMessageServer) error {
 	log.Printf("new client subscribed ..")
+	clients = append(clients, stream)
 	for {
 		select {
-		case m := <-notifChan:
-			if err := stream.Send(&pb.NotifReply{Replymessage: m}); err != nil {
-				log.Printf("publishing err %v", err)
-				return err
+		case msg := <-notifChan:
+			for _, client := range clients {
+				if err := client.Send(&pb.NotifReply{Replymessage: msg}); err != nil {
+					log.Printf("publishing err %v", err)
+					return err
+				}
 			}
 		}
 	}
