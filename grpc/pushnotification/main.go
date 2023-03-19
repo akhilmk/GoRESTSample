@@ -7,18 +7,19 @@ import (
 	"net"
 	"net/http"
 	"strconv"
-	"time"
 
 	pb "github.com/akhilmk/gosamples/grpc/pushnotification/proto"
 	"google.golang.org/grpc"
 )
 
 var (
-	port = flag.Int("port", 50051, "The server port")
+	port      = flag.Int("port", 50051, "The server port")
+	notifChan = make(chan string)
+	noCount   = 0
 )
 
 func main() {
-	go handleRequests()
+	go startNotifApi()
 	startGrpcServer()
 }
 
@@ -30,7 +31,7 @@ func startGrpcServer() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterNotifSubscriberServer(s, &server{})
-	log.Printf("grpc server started at %v", lis.Addr())
+	log.Printf("grpc server started at : %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
@@ -42,30 +43,29 @@ type server struct {
 }
 
 func (s *server) SubscribeMessage(in *pb.SubscribeMsg, stream pb.NotifSubscriber_SubscribeMessageServer) error {
-	log.Printf("subscriber called..")
-	i := 0
-	for t := range time.Tick(2 * time.Second) {
-		_ = t
-		log.Printf("publishing notification %v", i)
-		if err := stream.Send(&pb.NotifReply{Replymessage: strconv.Itoa(i)}); err != nil {
-			log.Printf("publishing err %v", err)
-			return err
+	log.Printf("new client subscribed ..")
+	for {
+		select {
+		case m := <-notifChan:
+			if err := stream.Send(&pb.NotifReply{Replymessage: m}); err != nil {
+				log.Printf("publishing err %v", err)
+				return err
+			}
 		}
-		i++
 	}
-	log.Printf("subscriber end..")
-	return nil
 }
 
 /***** REST API ****/
-// REST notify endpoint
-func notify(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "notify page!")
-	fmt.Println("Endpoint Hit: notify")
+func startNotifApi() {
+	http.HandleFunc("/notify", notify)
+	log.Println("notify api started at : 8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func handleRequests() {
-	http.HandleFunc("/notify", notify)
-	fmt.Println("notify api started at.. 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func notify(w http.ResponseWriter, r *http.Request) {
+	msg := "notification " + strconv.Itoa(noCount)
+	notifChan <- msg
+	fmt.Println(msg)
+	fmt.Fprintf(w, "notify count:"+strconv.Itoa(noCount))
+	noCount++
 }

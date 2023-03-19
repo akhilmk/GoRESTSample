@@ -30,22 +30,23 @@ func startGrpcClient() {
 	c := pb.NewNotifSubscriberClient(conn)
 
 	// stream message
-	log.Printf("stream started")
+	log.Printf("client subscribed, waiting for notification.")
 	// ctx, cancel = context.WithTimeout(context.Background(), 20*time.Second)
 	stream, er := c.SubscribeMessage(context.Background(), &pb.SubscribeMsg{})
 	if er != nil {
 		log.Printf("stream error")
 	}
+
 	for {
-		hellloreply, serr := stream.Recv()
-		if serr == io.EOF {
+		notifReply, sErr := stream.Recv()
+		if sErr == io.EOF {
 			log.Printf("stream break")
 			break
 		}
-		if serr != nil {
-			log.Fatalf("stream failed: %v", serr)
+		if sErr != nil {
+			log.Fatalf("stream failed: %v", sErr)
 		}
-		log.Printf("stream notification: %v", hellloreply.GetReplymessage())
+		log.Printf("new notification --> %v", notifReply.GetReplymessage())
 	}
 	log.Printf("stream exit")
 }
