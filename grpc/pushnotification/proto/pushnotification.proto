@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "github.com/akhilmk/gosamples/grpc/pushnotification/proto";
+
+package proto;
+
+// notification subscriber service
+service NotifSubscriber {
+    rpc SubscribeMessage(SubscribeMsg) returns (stream NotifReply) {}
+}
+
+// empty message for subscribe
+message SubscribeMsg {
+}
+
+// empty message for subscribe
+message NotifReply {
+    string replymessage = 1;
+}
+
+
