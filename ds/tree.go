@@ -1,10 +1,10 @@
-package main
+package ds
 
 import (
 	"fmt"
 )
 
-func main() {
+func Run() {
 	fmt.Println("main start")
 
 	node1 := &treeNode{7, nil, nil}

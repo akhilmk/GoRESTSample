@@ -1,4 +1,4 @@
-package main
+package rest
 
 import (
 	"encoding/json"
@@ -13,8 +13,8 @@ import (
 // Init books var a slice book struct
 var books []Book
 
-// Main function
-func main() {
+// exported function
+func Run() {
 
 	// Init gorilla mux router
 	router := mux.NewRouter()

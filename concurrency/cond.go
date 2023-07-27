@@ -1,4 +1,4 @@
-package main
+package concurrency
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 
 var ready bool
 
-func main() {
+func Run() {
 	fmt.Println("main start")
 	doSomeWorkWithCondSignal()
 	//doSomeWorkWithCondBroadcast()
