@@ -1,4 +1,4 @@
-package buffers
+package main
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Run() {
+func main() {
 
 	// we can pass below buffers anywhere io.Reader/io.Writer is required to read/write our given data.
 	buff := new(bytes.Buffer)                         // empty buffer - no data given

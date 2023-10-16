@@ -1,4 +1,4 @@
-package rest
+package main
 
 import (
 	"encoding/json"
@@ -14,7 +14,7 @@ import (
 var books []Book
 
 // exported function
-func Run() {
+func main() {
 
 	// Init gorilla mux router
 	router := mux.NewRouter()
