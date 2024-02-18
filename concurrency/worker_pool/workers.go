@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -22,10 +23,15 @@ func (w *worker) doWork() {
 var workerPool chan *worker
 
 func main() {
-	startWorkers()
+	// workers make sure specified number of goroutines are running at a time.
+	//startWorkersNormal()
+
+	// workers keep pooled reusable data as well.
+	startWorkersPool()
+
 }
 
-func startWorkers() {
+func startWorkersPool() {
 
 	numberOfWorkers := 10
 	workerPool = make(chan *worker, numberOfWorkers)
@@ -58,4 +64,26 @@ func getWorker(data string) *worker {
 
 func queueWorker(worker *worker) {
 	workerPool <- worker
+}
+
+func startWorkersNormal() {
+	go func() {
+		// count number of goroutines.
+		for range time.Tick(500 * time.Millisecond) {
+			fmt.Println("goroutines=", runtime.NumGoroutine())
+		}
+	}()
+
+	// make sure one time 20 goroutines are running.
+	threadLimiter := make(chan struct{}, 20)
+	for i := 1; true; i++ {
+		// block send when threadLimiter size reached
+		threadLimiter <- struct{}{}
+
+		go func(i int) {
+			time.Sleep(3 * time.Second)
+			fmt.Println("work done", i)
+			<-threadLimiter // reading, unblock sender if sender is waiting.
+		}(i)
+	}
 }
